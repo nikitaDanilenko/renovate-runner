@@ -4,6 +4,7 @@ module.exports = {
   onboarding: false,
   requireConfig: 'optional',
   repositories: [
+    'nikitaDanilenko/renovate-runner',
     'nikitaDanilenko/pubquiz-server',
   ],
-};
+}

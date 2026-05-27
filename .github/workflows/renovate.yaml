@@ -4,14 +4,6 @@ on:
   schedule:
     - cron: '0 5 * * 1'
   workflow_dispatch:
-    inputs:
-      logLevel:
-        description: 'Log level'
-        type: choice
-        default: 'info'
-        options:
-          - info
-          - debug
 
 concurrency:
   group: renovate
@@ -23,23 +15,36 @@ jobs:
     permissions:
       contents: read
     steps:
-      - name: Generate GitHub App token
-        id: token
-        uses: actions/create-github-app-token@v1
+      - name: Check Out
+        uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
         with:
-          app-id: ${{ vars.RENOVATE_APP_ID }}
-          private-key: ${{ secrets.RENOVATE_APP_KEY }}
-          owner: ${{ github.repository_owner }}
+          persist-credentials: false
 
-      - name: Checkout
-        uses: actions/checkout@v4
+      - name: Extract Repositories from config.js
+        id: repos
+        run: |
+          list=$(node -e "const c = require('./config.js'); console.log(c.repositories.map(r => r.split('/')[1]).join(','));")
+          echo "list=$list" >> "$GITHUB_OUTPUT"
+
+      - name: Generate GitHub App Token
+        id: app-token
+        uses: actions/create-github-app-token@bcd2ba49218906704ab6c1aa796996da409d3eb1 # v3.2.0
+        with:
+          client-id: ${{ vars.RENOVATE_BOT_CLIENT_ID }}
+          private-key: ${{ secrets.RENOVATE_BOT_PRIVATE_KEY }}
+          owner: nikitaDanilenko
+          repositories: ${{ steps.repos.outputs.list }}
+          permission-contents: write
+          permission-pull-requests: write
+          permission-issues: write
+          permission-workflows: write
 
       - name: Run Renovate
-        uses: renovatebot/github-action@v40
+        uses: renovatebot/github-action@693b9ef15eec82123529a37c782242f091365961 # v46.1.14
         env:
-          LOG_LEVEL: ${{ inputs.logLevel || 'info' }}
+          LOG_LEVEL: 'info'
           RENOVATE_PLATFORM: github
           RENOVATE_AUTODISCOVER: 'false'
         with:
-          token: ${{ steps.token.outputs.token }}
+          token: ${{ steps.app-token.outputs.token }}
           configurationFile: config.js
