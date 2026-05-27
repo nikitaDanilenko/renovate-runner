@@ -33,5 +33,5 @@ jobs:
           RENOVATE_PLATFORM: github
           RENOVATE_AUTODISCOVER: 'false'
         with:
-          token: ${{ steps.token.outputs.token }}
+          token: ${{ steps.app-token.outputs.token }}
           configurationFile: config.js
