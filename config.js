@@ -6,5 +6,8 @@ module.exports = {
   repositories: [
     'nikitaDanilenko/renovate-runner',
     'nikitaDanilenko/pubquiz-server',
+    'nikitaDanilenko/pubquiz-frontend',
+    'nikitaDanilenko/foodie',
+    'nikitaDanilenko/londo',
   ],
 }
