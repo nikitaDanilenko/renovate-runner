@@ -4,6 +4,9 @@
     "config:recommended",
     "helpers:pinGitHubActionDigests"
   ],
+  "prHourlyLimit": 0,
+  "prConcurrentLimit": 0,
+  "branchConcurrentLimit": 0,
   "packageRules": [
     {
       "matchUpdateTypes": ["minor", "patch", "digest"],
