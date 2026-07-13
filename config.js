@@ -9,5 +9,7 @@ module.exports = {
     'nikitaDanilenko/pubquiz-frontend',
     'nikitaDanilenko/foodie',
     'nikitaDanilenko/londo',
+    'nikitaDanilenko/git-ops',
+    'nikitaDanilenko/nikitaDanilenko.github.io',
   ],
 }
